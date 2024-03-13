@@ -1,0 +1,88 @@
+# Boot Arguments
+
+## Boot Arguments là gì?
+
+{% hint style="info" %}
+Boot Arguments hay Boot-arg là các tham số khởi động có thể sẽ giúp ích cho bạn trong một số trường hợp. Đôi khi, nó có thể giúp bạn tránh những lỗi không đáng có khi cài Hackintosh. Tuỳ vào các kext mà các bạn sử dụng thì số lượng boot-arg có thể sử dụng cũng sẽ thay đổi
+{% endhint %}
+
+## Boot-arg phôt biến
+
+| BOOT-ARGS                     | MÔ TẢ                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **-v**                        | Enable verbose giúp bạn có thể xem các lỗi ngay trên màn hình                                                                                                                                                                                                                                                                                                                                                |
+| **debug=0x100**               | Nó giúp disable watchdog trên macos. Giúp không bị reboot khi gặp kernel panic giúp bạn có thể đọc lỗi dễ dàng hơn                                                                                                                                                                                                                                                                                           |
+| **keepsyms=1**                | Dùng chung với debug=0x100 để giúp bạn có thể dễ dàng đọc các lỗi kernel panic                                                                                                                                                                                                                                                                                                                               |
+| **-no\_compat\_check**        | <p>Bỏ qua việc kiểm tra tương thích cho phép khởi động với SMBIOS/board-ids không hỗ trợ với phiên bản macOS<br>Khi sử dụng sẽ không thể kiểm tra cập nhật macOS từ macOS Big Sur 11.3 và mới hơn, sử dụng <a href="https://github.com/acidanthera/RestrictEvents">RestrictEvents</a> cùng bootarg <strong>revpatch=sbvmm</strong> để giải quyết</p>                                                         |
+| **npci=0x2000 / npci=0x3000** | <p><strong>Không sử dụng nếu <code>Above4GDecoding</code> đã được bật trong BIOS</strong>. Bắt buộc nếu bị đứng tại <strong>PCI Start Configuration</strong> lúc khởi động<br>Vô hiệu hoá gỡ lỗi PCI liên quan đến kIOPCIConfiguratorPFM64 / gIOPCITunnelledKey (với <strong>npci=0x3000</strong>)</p>                                                                                                       |
+| **e1000=0 / dk.e1000=0**      | <p><strong>e1000=0</strong> chỉ dành cho macOS Montery từ phiên bản 12.2.2, còn <strong>dk.e1000=0</strong> dành cho macOS Big Sur 11 cho tới macOS Montery 12.2.1<br>Buộc ethernet Intel I225-V sử dụng <code>AppleIntelI210Ethernet.kext</code> thay vì <code>com.apple.DriverKit-AppleEthernetE1000.dext</code> phổ biến dành cho mainboard có ethernet Intel I225-V thuộc dòng 400 series và mới hơn</p> |
+
+## Gỡ lỗi
+
+| BOOT-ARGS       | MÔ TẢ                                                                                                              |
+| --------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **-v**          | Enable verbose giúp bạn có thể xem các lỗi ngay trên màn hình                                                      |
+| **debug=0x100** | Nó giúp disable watchdog trên macos. Giúp không bị reboot khi gặp kernel panic giúp bạn có thể đọc lỗi dễ dàng hơn |
+| **+x**          | Tiến vào chế độ safe mode giúp bạn gỡ lỗi                                                                          |
+| **watchdog=0**  | Vô hiệu hoá watchdog timer nhằm tránh gặp watchdog panic khi hệ thống khởi động quá lâu                            |
+| **keepsyms=1**  | Dùng chung với debug=0x100 để giúp bạn có thể dễ dàng đọc các lỗi kernel panic                                     |
+
+## Map USB và sleep&#x20;
+
+| BOOT-ARGS        | MÔ TẢ                                                                                                               |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **uia\_include** | dùng để map usb với hackintool. Chỉ định những port được load                                                       |
+| **uia\_exclude** | Dùng để map usb với hackintool. Chỉ định những port bị loại bỏ                                                      |
+| **darkwake=0**   | dùng để fix lỗi darkwake xem chi tiết [tại đây](https://app.gitbook.com/s/auskGAp5wYbI1xQWn4YZ/universal/fix-sleep) |
+
+## Audio
+
+|                |                                                                                                                                            |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **alcid=xx**   | dùng để fix audio bằng apple alc xem chi tiết [tại đây](https://heavietnam.ga/2021/09/29/ii-patch-am-thanh-voi-apple-alc-with-patch-hpet/) |
+| **alcverbs=1** | Kích hoạt hỗ trợ alc-verb                                                                                                                  |
+| **alctcsel=1** | Sửa lỗi mất âm thanh sau khi chọn khởi động lại từ Windows sang macOS                                                                      |
+
+## DGPU
+
+| BOOT-ARGS            | MÔ TẢ                                                                                                                                                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **agdpmod=pikera**   | <p>Sử dụng để tắt board ID checks trên Navi GPUs (RX 5000 &#x26; 6000 series) nếu không sử dụng bạn sẽ nhận được 1 màn hình đen và chẳng có gì khác ngoài nó<br>Không sử dụng nó nếu gpu của bạn không phải Navi GPU</p> |
+| **nvda\_drv\_vrl=1** | Để enable web driver trên highsierra                                                                                                                                                                                     |
+| **-wegnoegpu**       | dùng để disable tất cả các gpu trừ igpu xem chi tiết các disable gpu [tại đây](https://heavietnam.ga/2022/06/13/disable-dgpu-laptop/)                                                                                    |
+| **shikigva=40**      | đổi boardID với iMacPro1,1. Cho phép các GPU Polaris, Vega and Navi GPUs xửa lý được tất cả các loại render. Hữu ích cho các bạn sử dụng smbios hỗ trợ igpu                                                              |
+| **radpg=15**         | Fix initialization cho HD 7730/7750/7770/R7 250/R7 250X                                                                                                                                                                  |
+| **-raddvi**          | Fix connector type DVI cho 290X, 370,…                                                                                                                                                                                   |
+| **-radvesa**         | Bắt các GPU amd vào chế độ VESA mode (bỏ qua tăng tốc GPU) Giúp ích cho việc gỡ lỗi                                                                                                                                      |
+| **agdpmod=vit9696**  | Disable board-id check có thể giúp bạn enable external display                                                                                                                                                           |
+| **nv\_disable=1**    | Buộc GPU NVIDIA vào VESA mode (bỏ qua tăng tốc GPU) Hữu ích cho việc gỡ lỗi                                                                                                                                              |
+| **unfairgva=x**      | Fix DRM xem chi tiết [tại đây](https://app.gitbook.com/s/auskGAp5wYbI1xQWn4YZ/gpu/fix-drm-support)                                                                                                                       |
+
+## IGPU
+
+| BOOT-ARGS            | MÔ TẢ                                                                                                                                                                                                                                                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **agdpmod=vit9696**  | Disable board-id check có thể giúp bạn enable external display                                                                                                                                                                                                                                                            |
+| **shikigva=1**       | Cho phép igpu xuất màn khi bạn đang sử dụng dgpu cho phép iGPU xử lý giải mã phần cứng ngay cả khi không sử framebuffer                                                                                                                                                                                                   |
+| **shikigva=4**       | cần thiết cho hỗ trợ tăng tốc phần cứng và giải mã video. Trên các hệ thống mới hơn haswell cần boot-arg `shikigva=12`                                                                                                                                                                                                    |
+| **-igfxnohdmi**      | Tắt chuyển đổi audio hdmi to DP                                                                                                                                                                                                                                                                                           |
+| **-cdfon**           | Thực hiện nhiều patch để bật hdmi 2.0                                                                                                                                                                                                                                                                                     |
+| **-igfxvesa**        | Buộc igpu vào VESA mode (bỏ qua tăng tốc GPU) Hữu ích cho việc gỡ lỗi                                                                                                                                                                                                                                                     |
+| **igfxonln=1**       | Thực hiện force-online giúp giải quyết vấn đề về wake screen trên Coffee and Comet Lake                                                                                                                                                                                                                                   |
+| **igfxfw=2**         | Cho phép tải chương trình cơ sở GUC của Apple IGPU yêu cầu chipset 9 series+                                                                                                                                                                                                                                              |
+| **-igfxblr**         | Khắc phục lỗi mất backlight trên các IGPU UHD                                                                                                                                                                                                                                                                             |
+| **-igfxblt**         | dùng để fix backlight cho CFL và CML trên 13.4 và mới hơn                                                                                                                                                                                                                                                                 |
+| **igfxonlnfbs=MASK** | Dùng để force-online frambuffer hữu ích cho IGPU                                                                                                                                                                                                                                                                          |
+| **-igfxbls**         | Làm độ sáng màn hình thay đổi mượt mà hơn dành cho CPU Intel Ivy Bridge và mới hơn. Tìm hiểu thêm tại hướng dẫn  [Intel® HD Graphics FAQs](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md#customize-the-behavior-of-the-backlight-smoother-to-improve-your-experience)                 |
+| **-igfxhdmidivs**    | Khắc phục lỗi kết nối HDMI với Pixel Clock Rate lớn hơn (VD: kết nối màn hình 2K/4K với HDMI 1.4) trên CPU Intel Skylake và mới hơn. Khi áp dụng bản vá, tần số quét màn hình kết nối sẽ bị giới hạn 59Hz với 2K còn nếu 4K chỉ còn 30Hz                                                                                  |
+| **-igfxlspcon**      | Thêm driver cho LSPCON chip đảm nhận việc chuyển kết nối DP sang HDMI 2.0 bởi Intel iGPU không hỗ trợ sẵn. Tìm hiểu thêm tại hướng dẫn [Intel® HD Graphics FAQs](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md#lspcon-driver-support-to-enable-displayport-to-hdmi-20-output-on-igpu) |
+| **-igfxmlr**         | Sửa lỗi giá trị link rate tốt đã cho màn hình được đọc từ DPCD buffer dành cho Dell XPS 15 9570,...                                                                                                                                                                                                                       |
+| **-igfxmpc**         | <p>Tăng giới hạn pixel clock lên tối đa cần thiết với màn hình laptop hoặc qua HDMI 2.0 có độ phân giải 4K@60Hz. Một số laptop cần đến như: Lenovo ThinkPad P71, Dell XPS 15,...<br>Mắc định giới hạn tối đa được áp dụng là 675MHz, có thể chỉnh thủ công với property <code>max-pixel-clock-frequency</code></p>        |
+| **igfxagdc=0**       | Nhằm vô hiệu hoá AGDC (Apple Automatic Device Gating Control) gây lỗi wake khi dùng màn hình 4K cho Intel iGPU                                                                                                                                                                                                            |
+| **wegtree=1**        | Cần thiết nếu iGPU không còn hoạt động khi dùng **igfxfw=2**. Thay đổi thành tên iGPU phù hợp sau khi Apple GUC Firmware được sử dụng                                                                                                                                                                                     |
+| **igfxrpsc=1**       | Áp dụng bản vá điều khiển RPS cải thiện hiệu năng iGPU từ thế hệ Kaby Lake và mới hơn với mainboard không hỗ trợ ME v12 support như Z370 và cũ hơn                                                                                                                                                                        |
+| **-igfxcdc**         | Hỗ trợ tất cả giá trị Core Display Clock (CDCLK) tồn tại trên dòng CPU Intel Ice Lake                                                                                                                                                                                                                                     |
+| **-igfxdbeo**        | Sửa lỗi Display Data Buffer (DBUF) trên dòng CPU Intel Ice Lake nếu không sau khi kết thúc verbose màn hình sẽ bị glitch nặng trong tầm 7 đến 15s                                                                                                                                                                         |
+| **-igfxdvmt**        | Tránh panic bởi giá trị `DVMT Pre-allocated` không phù hợp trên dòng CPU Intel Ice Lake                                                                                                                                                                                                                                   |
+
+Source tham khảo: [https://lzhoang2601.github.io/gathering-files/config/nvram](https://lzhoang2601.github.io/gathering-files/config/nvram)
