@@ -58,14 +58,6 @@ Phần này không có gì để chỉnh hãy để mặc định
 
 <figure><img src="../.gitbook/assets/image (90).png" alt=""><figcaption></figcaption></figure>
 
-#### MmioWhitelist
-
-|   Key   |   Type  | Value      |
-| :-----: | :-----: | ---------- |
-| Address |  Number | 4284481536 |
-| Comment |  String |            |
-| Enabled | Boolean | True       |
-
 #### Quirks <a href="#quirks-2" id="quirks-2"></a>
 
 | Quirk                  | Enabled | Comment             |
