@@ -93,13 +93,13 @@ AAPL,ig-platform-id đường dùng để macos sử dụng để xác định t
 
 > Nếu bạn đang dùng `HD 510, HD 550, P530 và tất cả HD P-series iGPU` những loại này không được apple chính thức support. Nên bạn cần phải fake `device-id`&#x20;
 
-> Tôi khuyến khích bạn fake `device-id` thành `26160000` cho HD 510
+> Tôi khuyến khích bạn fake `device-id` thành `02190000` cho HD 510
 
 | Key       | Type | Value      |
 | --------- | ---- | ---------- |
 | device-id | Data | `02190000` |
 
-> Tôi khuyến khích bạn fake `device-id` thành `26160000` cho HD 550 và P530
+> Tôi khuyến khích bạn fake `device-id` thành `16190000` cho HD 550 và P530
 
 | Key       | Type | Value      |
 | --------- | ---- | ---------- |
